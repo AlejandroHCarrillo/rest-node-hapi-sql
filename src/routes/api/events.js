@@ -38,11 +38,12 @@ module.exports.register = async server => {
               const db = request.server.plugins.sql.client;
               const userId = "user1234";// request.auth.credentials.profile.id;
               // console.log( request.payload );
-              const { title, description, startDate, endDate  } = request.payload;
+
+              const { title, description, startDate, startTime, endDate, endTime  } = request.payload;
                             
-              const res = await db.events.addEvent( { userId, title, description, startDate, endDate } );
+              const res = await db.events.addEvent( { userId, title, description, startDate, startTime, endDate, endTime } );
               return res.recordset[ 0 ];
-                // return "Aqui se insertara el usuario " + userId;
+
             } catch ( err ) {
 
                 console.log( [ "error", "api", "events" ], err );
@@ -52,6 +53,68 @@ module.exports.register = async server => {
             }
         }
     }
+} );
+
+server.route( {
+  method: "PUT",
+  path: "/api/events",
+  config: {
+      // auth: {
+      //     strategy: "session",
+      //     mode: "required"
+      // },
+      handler: async request => {
+          try {
+            const db = request.server.plugins.sql.client;
+            const userId = "user1234";// request.auth.credentials.profile.id;
+            // console.log( request.payload );
+
+            const { id, title, description, startDate, startTime, endDate, endTime  } = request.payload;
+                          
+            const res = await db.events.updateEvent( { id, userId, title, description, startDate, startTime, endDate, endTime } );
+            return res.recordset[ 0 ];
+
+          } catch ( err ) {
+
+              console.log( [ "error", "api", "events" ], err );
+              server.log( [ "error", "api", "events" ], err );
+              // return boom.boomify( err );
+              return err;
+          }
+      }
+    }
+} );
+
+server.route( {
+  method: "DELETE",
+  path: "/api/events/{id}",
+  config: {
+      // auth: {
+      //     strategy: "session",
+      //     mode: "required"
+      // },
+      response: {
+          emptyStatusCode: 204
+      },
+      handler: async request => {
+          try {
+              const id = request.params.id;
+              console.log(`id: ${id}`);
+              
+              // const userId = request.auth.credentials.profile.id;
+              const userId = "user1234";// request.auth.credentials.profile.id;
+
+              const db = request.server.plugins.sql.client;
+              const res = await db.events.deleteEvent( { id, userId } );
+              return res.rowsAffected[ 0 ] === 1 ? "" : boom.notFound();
+          } catch ( err ) {
+            console.log( [ "error", "api", "events" ], err );
+            server.log( [ "error", "api", "events" ], err );
+              // return boom.boomify( err );
+            return err;
+          }
+      }
+  }
 } );
 
 };

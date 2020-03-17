@@ -1,10 +1,10 @@
 UPDATE  [grajauser].[events]
 SET     [title] = @title
        , [description] = @description
-       , [startDate] = startDate
-       , [startTime] = @startTime
-       , [endDate] = @endDate
-       , [endTime] = @endTime
+       , [startDate] = cast(@startDate as datetime)
+       , [startTime] = cast(@startTime as datetime)
+       , [endDate] = cast(@endDate as datetime)
+       , [endTime] = cast(@endTime as datetime)
 WHERE   [id] = @id
  AND   [userId] = @userId;
 

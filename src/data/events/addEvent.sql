@@ -4,8 +4,9 @@ INSERT INTO [grajauser].[events]
    , [title]
    , [description]
    , [startDate]
-   -- , [startTime]
+   , [startTime]
    , [endDate]
+   , [endTime]
 )
 VALUES
 (
@@ -13,8 +14,9 @@ VALUES
    , @title
    , @description
    , cast(@startDate as datetime)
-   -- , convert(varchar, @startTime, 8)
+   , cast(@startTime as datetime)
    , cast(@endDate as datetime)
+   , cast(@endTime as datetime)
 );
 
 SELECT SCOPE_IDENTITY() AS id;
