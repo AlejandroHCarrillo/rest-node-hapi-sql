@@ -1,6 +1,7 @@
 "use strict";
 
 const events = require( "./events" );
+const users = require( "./users" );
 const sql = require( "mssql" );
 
 const client = async ( server, config ) => {
@@ -52,7 +53,8 @@ const client = async ( server, config ) => {
    // this is the API the client exposes to the rest
    // of the application
    return {
-       events: await events.register( { sql, getConnection } )
+       events: await events.register( { sql, getConnection } ),
+       users: await users.register( { sql, getConnection } )
    };
 };
 
